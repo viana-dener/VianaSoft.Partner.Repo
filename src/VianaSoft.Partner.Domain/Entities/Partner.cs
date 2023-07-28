@@ -6,14 +6,14 @@ namespace VianaSoft.Partner.Domain.Entities
     {
         #region Properties
 
-        public string Document { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public string? Document { get; private set; }
+        public string? Name { get; private set; }
+        public string? Description { get; private set; }
         public bool IsEnable { get; private set; }
         public bool IsExclude { get; private set; }
-        public string CreateBy { get; private set; }
+        public string? CreateBy { get; private set; }
         public DateTime CreateAt { get; private set; }
-        public string UpdateBy { get; private set; }
+        public string? UpdateBy { get; private set; }
         public DateTime? UpdateAt { get; private set; }
 
         #endregion
@@ -22,7 +22,7 @@ namespace VianaSoft.Partner.Domain.Entities
 
         public Partner() { }
 
-        public Partner(Guid id, string document, string name, string description, string createBy = null)
+        public Partner(Guid id, string? document, string? name, string? description, string? createBy = null)
         {
             Id = id;
             Document = document;
@@ -43,13 +43,13 @@ namespace VianaSoft.Partner.Domain.Entities
             return Document;
         }
 
-        public void AddCreatedBy(string createdBy)
+        public void AddCreatedBy(string? createdBy)
         {
             CreateBy = createdBy;
             CreateAt = DateTime.Now;
         }
 
-        public void UpdatePartner(string document, string name, string description, string updateBy)
+        public void UpdatePartner(string? document, string? name, string? description, string? updateBy)
         {
             Document = document;
             Name = name;
@@ -58,21 +58,21 @@ namespace VianaSoft.Partner.Domain.Entities
             UpdateAt = DateTime.Now;
         }
 
-        public void EnablePartner(string updateBy)
+        public void EnablePartner(string? updateBy)
         {
             IsEnable = true;
             UpdateBy = updateBy;
             UpdateAt = DateTime.Now;
         }
 
-        public void DisablePartner(string updateBy)
+        public void DisablePartner(string? updateBy)
         {
             IsEnable = false;
             UpdateBy = updateBy;
             UpdateAt = DateTime.Now;
         }
 
-        public void DeletePartner(string updateBy)
+        public void DeletePartner(string? updateBy)
         {
             IsExclude = true;
             UpdateBy = updateBy;
