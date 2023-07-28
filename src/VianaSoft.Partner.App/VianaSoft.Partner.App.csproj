@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+	</ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\VianaSoft.Partner.Data\VianaSoft.Partner.Data.csproj" />
     <ProjectReference Include="..\VianaSoft.Partner.Domain\VianaSoft.Partner.Domain.csproj" />

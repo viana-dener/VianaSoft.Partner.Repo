@@ -6,12 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="Filters\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Validations\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="11.6.0" />
+		<PackageReference Include="VianaSoft-BuildingBlocks" Version="1.0.5" />
+	</ItemGroup>
 
 </Project>
