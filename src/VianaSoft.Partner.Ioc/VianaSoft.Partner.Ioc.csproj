@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VianaSoft.Partner.App\VianaSoft.Partner.App.csproj" />
+    <ProjectReference Include="..\VianaSoft.Partner.Data\VianaSoft.Partner.Data.csproj" />
+  </ItemGroup>
+
+</Project>
