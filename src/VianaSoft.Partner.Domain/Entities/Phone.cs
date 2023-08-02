@@ -2,13 +2,15 @@
 
 namespace VianaSoft.Partner.Domain.Entities
 {
-    public class Partner : Entity, IAggregateRoot
+    public class Phone : Entity
     {
         #region Properties
-
-        public string Document { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public string DDICode { get; private set; }
+        public string DDDCode { get; private set; }
+        public string Number { get; private set; }
+        public bool IsCellPhone { get; private set; }
+        public bool IsWhatsapp { get; private set; }
+        public bool IsTelegram { get; private set; }
         
         public bool IsEnable { get; private set; }
         public bool IsExclude { get; private set; }
@@ -18,43 +20,48 @@ namespace VianaSoft.Partner.Domain.Entities
         public DateTime? UpdateAt { get; private set; }
 
         // EF Relation
-        public IEnumerable<Contact> Contacts { get; private set; }
+        public Guid ContactId { get; private set; }
+
         #endregion
 
         #region Builders
 
-        public Partner() { }
-
-        public Partner(string document, string name, string description, string createBy = null)
+        protected Phone()
         {
-            Document = document;
-            Name = name;
-            Description = description;
-            IsEnable = true;
-            IsExclude = false;
-            CreateBy = createBy;
-            CreateAt = DateTime.Now;
+
         }
 
+        public Phone(Guid contactId, string dDICode, string dDDCode, string number, bool isCellPhone, bool isWhatsapp, bool isTelegram, string createdBy = null)
+        {
+            ContactId = contactId;
+            DDICode = dDICode;
+            DDDCode = dDDCode;
+            Number = number;
+            IsCellPhone = isCellPhone;
+            IsWhatsapp = isWhatsapp;
+            IsTelegram = isTelegram;
+            IsEnable = true;
+            IsExclude = false;
+            CreateBy = createdBy;
+            CreateAt = DateTime.Now;
+        }
         #endregion
 
         #region Public Methods
-
-        public string GetByDocument()
-        {
-            return Document;
-        }
-
-        public void AddCreateBy(string createdBy)
+        public void AddCreatedBy(string createdBy)
         {
             CreateBy = createdBy;
             CreateAt = DateTime.Now;
         }
 
-        public void Update(string name, string description, string updateBy)
+        public void Update(string dDICode, string dDDCode, string number, bool isCellPhone, bool isWhatsapp, bool isTelegram, string updateBy)
         {
-            Name = name;
-            Description = description;
+            DDICode = dDICode;
+            DDDCode = dDDCode;
+            Number = number;
+            IsCellPhone = isCellPhone;
+            IsWhatsapp = isWhatsapp;
+            IsTelegram = isTelegram;
             UpdateBy = updateBy;
             UpdateAt = DateTime.Now;
         }

@@ -33,9 +33,4 @@
     <ProjectReference Include="..\VianaSoft.Partner.Ioc\VianaSoft.Partner.Ioc.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Configuration\" />
-    <Folder Include="Validations\" />
-  </ItemGroup>
-
 </Project>

@@ -4,11 +4,11 @@ using VianaSoft.BuildingBlocks.Core.Repository;
 
 namespace VianaSoft.Partner.Data.Context
 {
-    public class PartnerContext : DbContext, IUnitOfWork
+    public class DataContext : DbContext, IUnitOfWork
     {
         #region Builders
 
-        public PartnerContext(DbContextOptions<PartnerContext> options) : base(options)
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             ChangeTracker.AutoDetectChangesEnabled = false;
@@ -19,6 +19,8 @@ namespace VianaSoft.Partner.Data.Context
         #region Public Methods
 
         public DbSet<Domain.Entities.Partner> Partners { get; set; }
+        public DbSet<Domain.Entities.Contact> Contacts { get; set; }
+        public DbSet<Domain.Entities.Phone> Phones { get; set; }
 
         public async Task<bool> Commit()
         {
@@ -39,7 +41,7 @@ namespace VianaSoft.Partner.Data.Context
                 e => e.GetForeignKeys()))
                 relarionShip.DeleteBehavior = DeleteBehavior.ClientSetNull;
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PartnerContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
         }
 
         #endregion

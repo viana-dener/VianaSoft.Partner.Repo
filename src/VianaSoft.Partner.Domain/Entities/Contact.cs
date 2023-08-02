@@ -1,15 +1,16 @@
-﻿using VianaSoft.BuildingBlocks.Core.DomainObjects;
+﻿using System.Reflection.Metadata;
+using VianaSoft.BuildingBlocks.Core.DomainObjects;
 
 namespace VianaSoft.Partner.Domain.Entities
 {
-    public class Partner : Entity, IAggregateRoot
+    public class Contact : Entity
     {
         #region Properties
 
-        public string Document { get; private set; }
         public string Name { get; private set; }
-        public string Description { get; private set; }
-        
+        public string BusinessEmail { get; private set; }
+        public string PersonalEmail { get; private set; }
+
         public bool IsEnable { get; private set; }
         public bool IsExclude { get; private set; }
         public string CreateBy { get; private set; }
@@ -17,22 +18,26 @@ namespace VianaSoft.Partner.Domain.Entities
         public string UpdateBy { get; private set; }
         public DateTime? UpdateAt { get; private set; }
 
+
         // EF Relation
-        public IEnumerable<Contact> Contacts { get; private set; }
+        public Guid PartnerId { get; private set; }
+        public IEnumerable<Phone> Phones { get; protected set; }
+
         #endregion
 
         #region Builders
 
-        public Partner() { }
+        protected Contact() { }
 
-        public Partner(string document, string name, string description, string createBy = null)
+        public Contact(Guid partnerId, string name, string businessEmail, string personalEmail, string createdBy = null)
         {
-            Document = document;
+            PartnerId = partnerId;
             Name = name;
-            Description = description;
+            BusinessEmail = businessEmail;
+            PersonalEmail = personalEmail;
             IsEnable = true;
             IsExclude = false;
-            CreateBy = createBy;
+            CreateBy = createdBy;
             CreateAt = DateTime.Now;
         }
 
@@ -40,21 +45,16 @@ namespace VianaSoft.Partner.Domain.Entities
 
         #region Public Methods
 
-        public string GetByDocument()
-        {
-            return Document;
-        }
-
-        public void AddCreateBy(string createdBy)
+        public void AddCreatedBy(string createdBy)
         {
             CreateBy = createdBy;
             CreateAt = DateTime.Now;
         }
 
-        public void Update(string name, string description, string updateBy)
+        public void Update(string businessEmail, string personalEmail, string updateBy)
         {
-            Name = name;
-            Description = description;
+            BusinessEmail = businessEmail;
+            PersonalEmail = personalEmail;
             UpdateBy = updateBy;
             UpdateAt = DateTime.Now;
         }

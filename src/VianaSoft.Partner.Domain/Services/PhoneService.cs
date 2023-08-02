@@ -7,23 +7,23 @@ using VianaSoft.Partner.Domain.Interfaces;
 
 namespace VianaSoft.Partner.Domain.Services
 {
-    public class PartnerService : IPartnerService
+    public class PhoneService : IPhoneService
     {
         #region Properties
 
         private readonly INotifier _notifier;
-        private readonly IMyValidator<Entities.Partner> _validator;
+        private readonly IMyValidator<Entities.Phone> _validator;
         private readonly ILanguageMessage _message;
-        private readonly IPartnerRepository _repository;
+        private readonly IPhoneRepository _repository;
 
         #endregion
 
         #region Builders
 
-        public PartnerService(INotifier notifier,
-                              IMyValidator<Entities.Partner> validator,
+        public PhoneService(INotifier notifier,
+                              IMyValidator<Entities.Phone> validator,
                               ILanguageMessage message,
-                              IPartnerRepository repository)
+                              IPhoneRepository repository)
         {
             _notifier = notifier;
             _validator = validator;
@@ -35,36 +35,32 @@ namespace VianaSoft.Partner.Domain.Services
 
         #region Public Methods
 
-        public async Task<ListPage<Entities.Partner>> GetAllPagedAsync(ContactFilter filter)
+        public async Task<ListPage<Entities.Phone>> GetAllPagedAsync(PhoneFilter filter)
         {
             return await _repository.GetAllPagedAsync(filter);
         }
-        public async Task<IEnumerable<Entities.Partner>> GetAllAsync()
+        public async Task<IEnumerable<Entities.Phone>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }
-        public async Task<Entities.Partner> GetByIdAsync(string id)
+        public async Task<Entities.Phone> GetByIdAsync(string id)
         {
             return await _repository.GetByIdAsync(Guid.Parse(id));
         }
-        public async Task<ListPage<Entities.Partner>> GetByDocumentAsync(DocumentFilter filter)
+        public async Task<Entities.Phone> GetByNumberAsync(string number)
         {
-            return await _repository.GetByDocumentAsync(filter);
+            return await _repository.GetByNumberAsync(number);
         }
-        public async Task<Entities.Partner> GetByNameAsync(string document)
+        public async Task<Entities.Phone> ExistsAsync(string ddiCode, string dddCode, string number)
         {
-            return await _repository.GetByNameAsync(document);
-        }
-        public async Task<Entities.Partner> ExistDocument(string document)
-        {
-            return await _repository.ExistDocument(document);
+            return await _repository.ExistsAsync(ddiCode, dddCode, number);
         }
 
-        public async Task<bool> InsertAsync(Entities.Partner partner)
+        public async Task<bool> InsertAsync(Entities.Phone partner)
         {
             if (!_validator.IsValid(partner))
             {
-                _notifier.Add(_message.NotValid("Partner"));
+                _notifier.Add(_message.NotValid("Phone"));
                 return default;
             }
 
@@ -72,11 +68,11 @@ namespace VianaSoft.Partner.Domain.Services
 
             return await _repository.Commit();
         }
-        public async Task<bool> UpdateAsync(Entities.Partner partner)
+        public async Task<bool> UpdateAsync(Entities.Phone partner)
         {
             if (!_validator.IsValid(partner))
             {
-                _notifier.Add(_message.NotValid("Partner"));
+                _notifier.Add(_message.NotValid("Phone"));
                 return default;
             }
 

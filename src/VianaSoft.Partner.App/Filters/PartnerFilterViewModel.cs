@@ -2,10 +2,10 @@
 
 namespace VianaSoft.Partner.App.Filters
 {
-    public class FilterIViewModel : Pager
+    public class PartnerFilterViewModel : Pager
     {
-        public string? Name { get; set; }
-        public string? Document { get; set; }
+        public string Name { get; set; }
+        public string Document { get; set; }
         public bool? Enable { get; set; }
     }
 }

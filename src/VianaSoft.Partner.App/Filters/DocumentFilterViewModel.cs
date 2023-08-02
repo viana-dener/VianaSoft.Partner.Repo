@@ -2,8 +2,8 @@
 
 namespace VianaSoft.Partner.App.Filters
 {
-    public class DocumentFilterIViewModel : Pager
+    public class DocumentFilterViewModel : Pager
     {
-        public string? Document { get; set; }
+        public string Document { get; set; }
     }
 }
