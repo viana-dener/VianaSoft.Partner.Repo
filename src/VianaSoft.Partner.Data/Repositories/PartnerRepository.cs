@@ -33,7 +33,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
         public IUnitOfWork UnitOfWork => _context;
 
-        public async Task<ListPage<Domain.Entities.Partner>> GetAllPagedAsync(ContactFilter filter)
+        public async Task<ListPage<Domain.Entities.Partner>> GetAllPagedAsync(PartnerFilter filter)
         {
             return ExistFilters(filter) ? await WithFilter(filter) : await NoFilter(filter);
         }
@@ -83,7 +83,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
         #region Private Methods
 
-        private async Task<ListPage<Domain.Entities.Partner>> WithFilter(ContactFilter filterBase)
+        private async Task<ListPage<Domain.Entities.Partner>> WithFilter(PartnerFilter filterBase)
         {
             int count = _context.Partners.AsNoTracking().Count();
             var filter = CreateFilter(filterBase);
@@ -102,7 +102,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
             return new ListPage<Domain.Entities.Partner>(partners, filterBase.Page, filterBase.ItemsPerPage, count, (count + filterBase.ItemsPerPage - 1) / filterBase.ItemsPerPage);
         }
-        private async Task<ListPage<Domain.Entities.Partner>> NoFilter(ContactFilter filterBase)
+        private async Task<ListPage<Domain.Entities.Partner>> NoFilter(PartnerFilter filterBase)
         {
             int count = _context.Partners.AsNoTracking().Count();
             var sortExpr = CreateOrder(filterBase);
@@ -114,7 +114,7 @@ namespace VianaSoft.Partner.Data.Repositories
         {
             return await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).ToListAsync();
         }
-        private async Task<List<Domain.Entities.Partner>> GetData(ContactFilter filterBase, Expression<Func<Domain.Entities.Partner, bool>> filter, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
+        private async Task<List<Domain.Entities.Partner>> GetData(PartnerFilter filterBase, Expression<Func<Domain.Entities.Partner, bool>> filter, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
         {
             List<Domain.Entities.Partner> partners;
             if (filterBase.OrderType.ToLower().Equals("asc"))
@@ -124,7 +124,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
             return partners;
         }
-        private async Task<List<Domain.Entities.Partner>> GetData(ContactFilter filterBase, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
+        private async Task<List<Domain.Entities.Partner>> GetData(PartnerFilter filterBase, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
         {
             List<Domain.Entities.Partner> partners;
             if (filterBase.OrderType.ToLower().Equals("asc"))
@@ -144,11 +144,11 @@ namespace VianaSoft.Partner.Data.Repositories
 
             return partners;
         }
-        private Expression<Func<Domain.Entities.Partner, bool>> CreateFilter(ContactFilter filterBase)
+        private Expression<Func<Domain.Entities.Partner, bool>> CreateFilter(PartnerFilter filterBase)
         {
             List<FilterItem> filters = new();
-            if (!string.IsNullOrWhiteSpace(filterBase.PartnerId))
-                filters.Add(new FilterItem { Property = "PartnerId", FilterType = "contains", Value = filterBase.PartnerId });
+            if (!string.IsNullOrWhiteSpace(filterBase.Document))
+                filters.Add(new FilterItem { Property = "Document", FilterType = "contains", Value = filterBase.Document });
             if (!string.IsNullOrWhiteSpace(filterBase.Name))
                 filters.Add(new FilterItem { Property = "Name", FilterType = "contains", Value = filterBase.Name });
             if (filterBase.IsEnable.HasValue)
@@ -164,7 +164,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
             return _filter.FromFiltroItemList<Domain.Entities.Partner>(filters);
         }
-        private static Expression<Func<Domain.Entities.Partner, object>> CreateOrder(ContactFilter filterBase)
+        private static Expression<Func<Domain.Entities.Partner, object>> CreateOrder(PartnerFilter filterBase)
         {
             var param = Expression.Parameter(typeof(Domain.Entities.Partner), "u");
             var property = Expression.Convert(Expression.Property(param, filterBase.OrderBy), typeof(object));
@@ -176,9 +176,9 @@ namespace VianaSoft.Partner.Data.Repositories
             var property = Expression.Convert(Expression.Property(param, filterBase.OrderBy), typeof(object));
             return Expression.Lambda<Func<Domain.Entities.Partner, object>>(property, param);
         }
-        private static bool ExistFilters(ContactFilter filter)
+        private static bool ExistFilters(PartnerFilter filter)
         {
-            return !string.IsNullOrWhiteSpace(filter.PartnerId) ||
+            return !string.IsNullOrWhiteSpace(filter.Document) ||
                    !string.IsNullOrWhiteSpace(filter.Name) ||
                    filter.IsEnable.HasValue;
         }

@@ -47,7 +47,7 @@ namespace VianaSoft.Partner.Api.Controllers
         [ProducesResponseType(typeof(ListPage<PartnerResponseViewModel>), 200)]
         [ProducesResponseType(typeof(MessageErrors), 400)]
         [SwaggerOperation(Summary = "Get a paginated list of partners.")]
-        public async Task<IActionResult> GetAllPagedAsync([FromQuery] ContactFilterViewModel filter)
+        public async Task<IActionResult> GetAllPagedAsync([FromQuery] PartnerFilterViewModel filter)
         {
             var result = await _application.GetAllPagedAsync(filter);
             if (result == null) _notifier.Add(_message.NotFound());

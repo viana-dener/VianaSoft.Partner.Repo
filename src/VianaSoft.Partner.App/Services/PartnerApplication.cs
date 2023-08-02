@@ -44,9 +44,9 @@ namespace VianaSoft.Partner.App.Services
 
         #region Public Methods
 
-        public async Task<ListPage<PartnerResponseViewModel>> GetAllPagedAsync(ContactFilterViewModel filter)
+        public async Task<ListPage<PartnerResponseViewModel>> GetAllPagedAsync(PartnerFilterViewModel filter)
         {
-            return _mapper.Map<ListPage<PartnerResponseViewModel>>(await _service.GetAllPagedAsync(_mapper.Map<ContactFilter>(filter)));
+            return _mapper.Map<ListPage<PartnerResponseViewModel>>(await _service.GetAllPagedAsync(_mapper.Map<PartnerFilter>(filter)));
         }
         public async Task<IEnumerable<PartnerResponseViewModel>> GetAllAsync()
         {
@@ -63,14 +63,14 @@ namespace VianaSoft.Partner.App.Services
             return _mapper.Map<ListPage<PartnerResponseViewModel>>(await _service.GetByDocumentAsync(_mapper.Map<DocumentFilter>(filter)));
         }
 
-        public async Task<bool> InsertAsync(PartnerRequestViewModel parther)
+        public async Task<bool> InsertAsync(PartnerRequestViewModel request)
         {
-            return await CreatePartner(parther);
+            return await CreatePartner(request);
         }
-        public async Task<bool> UpdateAsync(string id, PartnerUpdateRequestViewModel parther)
+        public async Task<bool> UpdateAsync(string id, PartnerUpdateRequestViewModel request)
         {
             if (!await ValidId(id)) return false;
-            return await Update(id, parther);
+            return await Update(id, request);
         }
         public async Task<bool> EnableAsync(string id)
         {
@@ -101,9 +101,9 @@ namespace VianaSoft.Partner.App.Services
 
             return await _service.InsertAsync(parther);
         }
-        private async Task<bool> Update(string id, PartnerUpdateRequestViewModel parther)
+        private async Task<bool> Update(string id, PartnerUpdateRequestViewModel request)
         {
-            if (await ExistName(parther.Name))
+            if (await ExistName(request.Name))
             {
                 _notifier.Add(_message.Exists("Name"));
                 return false;
@@ -115,7 +115,7 @@ namespace VianaSoft.Partner.App.Services
                 _notifier.Add(_message.NotFound("Partner"));
                 return false;
             }
-            result.Update(parther.Name, parther.Description, _aspNetUser.Name);
+            result.Update(request.Name, request.Description, _aspNetUser.Name);
 
             return await _service.UpdateAsync(result);
         }

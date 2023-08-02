@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using VianaSoft.BuildingBlocks.Core.Extensions;
 using VianaSoft.BuildingBlocks.Core.Notifications.Interfaces;
 using VianaSoft.BuildingBlocks.Core.Pagination;
@@ -60,7 +61,7 @@ namespace VianaSoft.Partner.App.Services
         }
         public async Task<ContactResponseViewModel> GetByNameAsync(string name)
         {
-            if (!await ValidId(name)) return default;
+            if (name.IsNullOrEmpty()) return default;
 
             return _mapper.Map<ContactResponseViewModel>(await _service.GetByNameAsync(name));
         }

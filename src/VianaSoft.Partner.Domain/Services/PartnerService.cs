@@ -35,7 +35,7 @@ namespace VianaSoft.Partner.Domain.Services
 
         #region Public Methods
 
-        public async Task<ListPage<Entities.Partner>> GetAllPagedAsync(ContactFilter filter)
+        public async Task<ListPage<Entities.Partner>> GetAllPagedAsync(PartnerFilter filter)
         {
             return await _repository.GetAllPagedAsync(filter);
         }
