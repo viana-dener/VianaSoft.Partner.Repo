@@ -6,6 +6,6 @@ namespace VianaSoft.Partner.Domain.Filters
     {
         public string Name { get; set; }
         public string Document { get; set; }
-        public bool? Enable { get; set; }
+        public bool? IsEnable { get; set; }
     }
 }

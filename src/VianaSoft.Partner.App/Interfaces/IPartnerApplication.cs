@@ -7,7 +7,7 @@ namespace VianaSoft.Partner.App.Interfaces
 {
     public interface IPartnerApplication
     {
-        Task<ListPage<PartnerResponseViewModel>> GetAllPagedAsync(ContactFilterViewModel filter);
+        Task<ListPage<PartnerResponseViewModel>> GetAllPagedAsync(PartnerFilterViewModel filter);
         Task<IEnumerable<PartnerResponseViewModel>> GetAllAsync();
         Task<PartnerResponseViewModel> GetByIdAsync(string id);
         Task<ListPage<PartnerResponseViewModel>> GetByDocumentAsync(DocumentFilterViewModel filter);
