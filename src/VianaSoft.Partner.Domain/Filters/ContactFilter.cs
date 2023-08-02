@@ -2,10 +2,10 @@
 
 namespace VianaSoft.Partner.Domain.Filters
 {
-    public class FilterBase : Pager
+    public class ContactFilter : Pager
     {
-        public string? Document { get; set; }
-        public string? Name { get; set; }
+        public string PartnerId { get; set; }
+        public string Name { get; set; }
         public bool? IsEnable { get; set; }
     }
 }

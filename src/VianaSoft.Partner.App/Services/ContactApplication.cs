@@ -13,7 +13,7 @@ using VianaSoft.Partner.Domain.Interfaces;
 
 namespace VianaSoft.Partner.App.Services
 {
-    public class PartnerApplication : IPartnerApplication
+    public class ContactApplication : IContactApplication
     {
         #region Properties
 
@@ -21,17 +21,17 @@ namespace VianaSoft.Partner.App.Services
         private readonly INotifier _notifier;
         private readonly IAspNetUser _aspNetUser;
         private readonly ILanguageMessage _message;
-        private readonly IPartnerService _service;
+        private readonly IContactService _service;
 
         #endregion
 
         #region Builders
 
-        public PartnerApplication(IMapper mapper,
+        public ContactApplication(IMapper mapper,
                                   INotifier notifier,
                                   IAspNetUser aspNetUser,
                                   ILanguageMessage message,
-                                  IPartnerService service)
+                                  IContactService service)
         {
             _mapper = mapper;
             _notifier = notifier;
@@ -44,33 +44,35 @@ namespace VianaSoft.Partner.App.Services
 
         #region Public Methods
 
-        public async Task<ListPage<PartnerResponseViewModel>> GetAllPagedAsync(ContactFilterViewModel filter)
+        public async Task<ListPage<ContactResponseViewModel>> GetAllPagedAsync(ContactFilterViewModel filter)
         {
-            return _mapper.Map<ListPage<PartnerResponseViewModel>>(await _service.GetAllPagedAsync(_mapper.Map<ContactFilter>(filter)));
+            return _mapper.Map<ListPage<ContactResponseViewModel>>(await _service.GetAllPagedAsync(_mapper.Map<ContactFilter>(filter)));
         }
-        public async Task<IEnumerable<PartnerResponseViewModel>> GetAllAsync()
+        public async Task<IEnumerable<ContactResponseViewModel>> GetAllAsync()
         {
-            return _mapper.Map<IEnumerable<PartnerResponseViewModel>>(await _service.GetAllAsync());
+            return _mapper.Map<IEnumerable<ContactResponseViewModel>>(await _service.GetAllAsync());
         }
-        public async Task<PartnerResponseViewModel> GetByIdAsync(string id)
+        public async Task<ContactResponseViewModel> GetByIdAsync(string id)
         {
             if (!await ValidId(id)) return default;
 
-            return _mapper.Map<PartnerResponseViewModel>(await _service.GetByIdAsync(id));
+            return _mapper.Map<ContactResponseViewModel>(await _service.GetByIdAsync(id));
         }
-        public async Task<ListPage<PartnerResponseViewModel>> GetByDocumentAsync(DocumentFilterViewModel filter)
+        public async Task<ContactResponseViewModel> GetByNameAsync(string name)
         {
-            return _mapper.Map<ListPage<PartnerResponseViewModel>>(await _service.GetByDocumentAsync(_mapper.Map<DocumentFilter>(filter)));
+            if (!await ValidId(name)) return default;
+
+            return _mapper.Map<ContactResponseViewModel>(await _service.GetByNameAsync(name));
         }
 
-        public async Task<bool> InsertAsync(PartnerRequestViewModel parther)
+        public async Task<bool> InsertAsync(ContactRequestViewModel contact)
         {
-            return await CreatePartner(parther);
+            return await Create(contact);
         }
-        public async Task<bool> UpdateAsync(string id, PartnerUpdateRequestViewModel parther)
+        public async Task<bool> UpdateAsync(string id, ContactUpdateRequestViewModel contact)
         {
             if (!await ValidId(id)) return false;
-            return await Update(id, parther);
+            return await Update(id, contact);
         }
         public async Task<bool> EnableAsync(string id)
         {
@@ -89,33 +91,27 @@ namespace VianaSoft.Partner.App.Services
 
         #region Private Methods
 
-        private async Task<bool> CreatePartner(PartnerRequestViewModel request)
+        private async Task<bool> Create(ContactRequestViewModel request)
         {
-            if (await ExistDocument(request.Document) || await ExistName(request.Name))
-            {
-                _notifier.Add(_message.Exists("Document or Name"));
-                return false;
-            }
-
-            var parther = new Domain.Entities.Partner(request.Document, request.Name, request.Description, _aspNetUser.Name);
-
-            return await _service.InsertAsync(parther);
-        }
-        private async Task<bool> Update(string id, PartnerUpdateRequestViewModel parther)
-        {
-            if (await ExistName(parther.Name))
+            if (await Exists(request.Name))
             {
                 _notifier.Add(_message.Exists("Name"));
                 return false;
             }
 
+            var parther = new Domain.Entities.Contact(Guid.Parse(request.PartnerId), request.Name, request.BusinessEmail, request.PersonalEmail, _aspNetUser.Name);
+
+            return await _service.InsertAsync(parther);
+        }
+        private async Task<bool> Update(string id, ContactUpdateRequestViewModel request)
+        {
             var result = await _service.GetByIdAsync(id);
             if (result == null)
             {
-                _notifier.Add(_message.NotFound("Partner"));
+                _notifier.Add(_message.NotFound("Contact"));
                 return false;
             }
-            result.Update(parther.Name, parther.Description, _aspNetUser.Name);
+            result.Update(request.BusinessEmail, request.PersonalEmail, _aspNetUser.Name);
 
             return await _service.UpdateAsync(result);
         }
@@ -124,7 +120,7 @@ namespace VianaSoft.Partner.App.Services
             var result = await _service.GetByIdAsync(id);
             if (result == null)
             {
-                _notifier.Add(_message.NotFound("Partner"));
+                _notifier.Add(_message.NotFound("Contact"));
                 return false;
             }
             result?.Enable(_aspNetUser.Name);
@@ -136,22 +132,14 @@ namespace VianaSoft.Partner.App.Services
             var result = await _service.GetByIdAsync(id);
             if (result == null)
             {
-                _notifier.Add(_message.NotFound("Partner"));
+                _notifier.Add(_message.NotFound("Contact"));
                 return false;
             }
             result?.Disable(_aspNetUser.Name);
 
             return await _service.UpdateAsync(result);
         }
-        private async Task<bool> ExistDocument(string document)
-        {
-            var country = await _service.ExistDocument(document);
-            if (country != null)
-                return true;
-
-            return false;
-        }
-        private async Task<bool> ExistName(string name)
+        private async Task<bool> Exists(string name)
         {
             var country = await _service.GetByNameAsync(name);
             if (country != null)

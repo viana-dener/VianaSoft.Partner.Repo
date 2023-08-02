@@ -33,18 +33,32 @@ namespace VianaSoft.Partner.Ioc
 
             // Applications
             services.AddScoped<IPartnerApplication, PartnerApplication>();
+            services.AddScoped<IContactApplication, ContactApplication>();
+            services.AddScoped<IPhoneApplication, PhoneApplication>();
 
             // Domain
             services.AddScoped<IPartnerService, PartnerService>();
+            services.AddScoped<IContactService, ContactService>();
+            services.AddScoped<IPhoneService, PhoneService>();
 
             // Repository
-            services.AddScoped<PartnerContext>();
+            services.AddScoped<DataContext>();
             services.AddScoped<IPartnerRepository, PartnerRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddScoped<IPhoneRepository, PhoneRepository>();
 
             // Validate
             services.AddScoped<IFactoryValidators<Domain.Entities.Partner>, FactoryValidators<Domain.Entities.Partner>>();
             services.AddScoped<IMyValidatorBase<Domain.Entities.Partner>, PartnerValidator>();
             services.AddScoped<IMyValidator<Domain.Entities.Partner>, MyValidator<Domain.Entities.Partner>>();
+
+            services.AddScoped<IFactoryValidators<Domain.Entities.Contact>, FactoryValidators<Domain.Entities.Contact>>();
+            services.AddScoped<IMyValidatorBase<Domain.Entities.Contact>, ContactValidator>();
+            services.AddScoped<IMyValidator<Domain.Entities.Contact>, MyValidator<Domain.Entities.Contact>>();
+
+            services.AddScoped<IFactoryValidators<Domain.Entities.Phone>, FactoryValidators<Domain.Entities.Phone>>();
+            services.AddScoped<IMyValidatorBase<Domain.Entities.Phone>, PhoneValidator>();
+            services.AddScoped<IMyValidator<Domain.Entities.Phone>, MyValidator<Domain.Entities.Phone>>();
 
             return services;
         }

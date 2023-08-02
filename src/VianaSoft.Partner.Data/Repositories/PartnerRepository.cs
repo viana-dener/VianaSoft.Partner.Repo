@@ -15,13 +15,13 @@ namespace VianaSoft.Partner.Data.Repositories
         #region Properties
 
         private readonly IDynamicFilter _filter;
-        private readonly PartnerContext _context;
+        private readonly DataContext _context;
 
         #endregion
 
         #region Builders
 
-        public PartnerRepository(IDynamicFilter filter, PartnerContext context)
+        public PartnerRepository(IDynamicFilter filter, DataContext context)
         {
             _filter = filter;
             _context = context;
@@ -33,7 +33,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
         public IUnitOfWork UnitOfWork => _context;
 
-        public async Task<ListPage<Domain.Entities.Partner>> GetAllPagedAsync(FilterBase filter)
+        public async Task<ListPage<Domain.Entities.Partner>> GetAllPagedAsync(ContactFilter filter)
         {
             return ExistFilters(filter) ? await WithFilter(filter) : await NoFilter(filter);
         }
@@ -43,7 +43,7 @@ namespace VianaSoft.Partner.Data.Repositories
         }
         public async Task<Domain.Entities.Partner> GetByIdAsync(Guid id)
         {
-            return await _context.Partners.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<ListPage<Domain.Entities.Partner>> GetByDocumentAsync(DocumentFilter filter)
         {
@@ -83,7 +83,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
         #region Private Methods
 
-        private async Task<ListPage<Domain.Entities.Partner>> WithFilter(FilterBase filterBase)
+        private async Task<ListPage<Domain.Entities.Partner>> WithFilter(ContactFilter filterBase)
         {
             int count = _context.Partners.AsNoTracking().Count();
             var filter = CreateFilter(filterBase);
@@ -102,7 +102,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
             return new ListPage<Domain.Entities.Partner>(partners, filterBase.Page, filterBase.ItemsPerPage, count, (count + filterBase.ItemsPerPage - 1) / filterBase.ItemsPerPage);
         }
-        private async Task<ListPage<Domain.Entities.Partner>> NoFilter(FilterBase filterBase)
+        private async Task<ListPage<Domain.Entities.Partner>> NoFilter(ContactFilter filterBase)
         {
             int count = _context.Partners.AsNoTracking().Count();
             var sortExpr = CreateOrder(filterBase);
@@ -110,51 +110,45 @@ namespace VianaSoft.Partner.Data.Repositories
 
             return new ListPage<Domain.Entities.Partner>(partners, filterBase.Page, filterBase.ItemsPerPage, count, (count + filterBase.ItemsPerPage - 1) / filterBase.ItemsPerPage);
         }
-        private bool ExistFilters(FilterBase filter)
-        {
-            return !string.IsNullOrWhiteSpace(filter.Document) ||
-                   !string.IsNullOrWhiteSpace(filter.Name) ||
-                   filter.IsEnable.HasValue;
-        }
         private async Task<IEnumerable<Domain.Entities.Partner>> GetDataAsync()
         {
-            return await _context.Partners.AsNoTracking().ToListAsync();
+            return await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).ToListAsync();
         }
-        private async Task<List<Domain.Entities.Partner>> GetData(FilterBase filterBase, Expression<Func<Domain.Entities.Partner, bool>> filter, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
+        private async Task<List<Domain.Entities.Partner>> GetData(ContactFilter filterBase, Expression<Func<Domain.Entities.Partner, bool>> filter, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
         {
             List<Domain.Entities.Partner> partners;
             if (filterBase.OrderType.ToLower().Equals("asc"))
-                partners = await _context.Partners.AsNoTracking().Where(filter).OrderBy(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
+                partners = await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).Where(filter).OrderBy(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
             else
-                partners = await _context.Partners.AsNoTracking().Where(filter).OrderByDescending(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
+                partners = await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).Where(filter).OrderByDescending(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
 
             return partners;
         }
-        private async Task<List<Domain.Entities.Partner>> GetData(FilterBase filterBase, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
+        private async Task<List<Domain.Entities.Partner>> GetData(ContactFilter filterBase, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
         {
-            List<Domain.Entities.Partner> addresses;
+            List<Domain.Entities.Partner> partners;
             if (filterBase.OrderType.ToLower().Equals("asc"))
-                addresses = await _context.Partners.AsNoTracking().OrderBy(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
+                partners = await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).OrderBy(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
             else
-                addresses = await _context.Partners.AsNoTracking().OrderByDescending(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
+                partners = await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).OrderByDescending(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
 
-            return addresses;
+            return partners;
         }
         private async Task<List<Domain.Entities.Partner>> GetData(DocumentFilter filterBase, Expression<Func<Domain.Entities.Partner, bool>> filter, Expression<Func<Domain.Entities.Partner, object>> sortExpr)
         {
             List<Domain.Entities.Partner> partners;
             if (filterBase.OrderType.ToLower().Equals("asc"))
-                partners = await _context.Partners.AsNoTracking().Where(filter).OrderBy(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
+                partners = await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).Where(filter).OrderBy(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
             else
-                partners = await _context.Partners.AsNoTracking().Where(filter).OrderByDescending(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
+                partners = await _context.Partners.AsNoTracking().Include(x => x.Contacts).ThenInclude(x => x.Phones).Where(filter).OrderByDescending(sortExpr).Skip((filterBase.Page - 1) * filterBase.ItemsPerPage).Take(filterBase.ItemsPerPage).ToListAsync();
 
             return partners;
         }
-        private Expression<Func<Domain.Entities.Partner, bool>> CreateFilter(FilterBase filterBase)
+        private Expression<Func<Domain.Entities.Partner, bool>> CreateFilter(ContactFilter filterBase)
         {
             List<FilterItem> filters = new();
-            if (!string.IsNullOrWhiteSpace(filterBase.Document))
-                filters.Add(new FilterItem { Property = "Document", FilterType = "contains", Value = filterBase.Document });
+            if (!string.IsNullOrWhiteSpace(filterBase.PartnerId))
+                filters.Add(new FilterItem { Property = "PartnerId", FilterType = "contains", Value = filterBase.PartnerId });
             if (!string.IsNullOrWhiteSpace(filterBase.Name))
                 filters.Add(new FilterItem { Property = "Name", FilterType = "contains", Value = filterBase.Name });
             if (filterBase.IsEnable.HasValue)
@@ -170,7 +164,7 @@ namespace VianaSoft.Partner.Data.Repositories
 
             return _filter.FromFiltroItemList<Domain.Entities.Partner>(filters);
         }
-        private static Expression<Func<Domain.Entities.Partner, object>> CreateOrder(FilterBase filterBase)
+        private static Expression<Func<Domain.Entities.Partner, object>> CreateOrder(ContactFilter filterBase)
         {
             var param = Expression.Parameter(typeof(Domain.Entities.Partner), "u");
             var property = Expression.Convert(Expression.Property(param, filterBase.OrderBy), typeof(object));
@@ -181,6 +175,12 @@ namespace VianaSoft.Partner.Data.Repositories
             var param = Expression.Parameter(typeof(Domain.Entities.Partner), "u");
             var property = Expression.Convert(Expression.Property(param, filterBase.OrderBy), typeof(object));
             return Expression.Lambda<Func<Domain.Entities.Partner, object>>(property, param);
+        }
+        private static bool ExistFilters(ContactFilter filter)
+        {
+            return !string.IsNullOrWhiteSpace(filter.PartnerId) ||
+                   !string.IsNullOrWhiteSpace(filter.Name) ||
+                   filter.IsEnable.HasValue;
         }
 
         #endregion
