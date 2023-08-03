@@ -45,7 +45,7 @@ namespace VianaSoft.Partner.Domain.Entities
 
         #region Public Methods
 
-        public void AddCreatedBy(string createdBy)
+        public void AddCreateBy(string createdBy)
         {
             CreateBy = createdBy;
             CreateAt = DateTime.Now;

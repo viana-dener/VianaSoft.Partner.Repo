@@ -53,8 +53,8 @@ namespace VianaSoft.Partner.Tests.Application
             var filter1 = Builder<PartnerFilterViewModel>.CreateNew().Build();
             var filter2 = Builder<PartnerFilter>.CreateNew().Build();
             
-            var items1 = Builder<Domain.Entities.Partner>.CreateListOfSize(10).Build();
-            var result1 = Builder<ListPage<Domain.Entities.Partner>>.CreateNew().With(x => x.Items, items1).Build();
+            var items1 = Builder<Partner.Domain.Entities.Partner>.CreateListOfSize(10).Build();
+            var result1 = Builder<ListPage<Partner.Domain.Entities.Partner>>.CreateNew().With(x => x.Items, items1).Build();
 
             var items2 = Builder<PartnerResponseViewModel>.CreateListOfSize(10).Build();
             var result2 = Builder<ListPage<PartnerResponseViewModel>>.CreateNew().With(x => x.Items, items2).Build();
@@ -80,7 +80,7 @@ namespace VianaSoft.Partner.Tests.Application
         public async void GetAllAsync_Success()
         {
             // Scenario
-            var result1 = Builder<Domain.Entities.Partner>.CreateListOfSize(10).Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateListOfSize(10).Build();
             var result2 = Builder<PartnerResponseViewModel>.CreateListOfSize(10).Build();
 
             _mapper.Setup(x => x.Map<IEnumerable<PartnerResponseViewModel>>(result1)).Returns(result2);
@@ -103,7 +103,7 @@ namespace VianaSoft.Partner.Tests.Application
         {
             // Scenario
             var filter = Guid.NewGuid().ToString();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
             var result2 = Builder<PartnerResponseViewModel>.CreateNew().Build();
 
             _mapper.Setup(x => x.Map<PartnerResponseViewModel>(result1)).Returns(result2);
@@ -126,7 +126,7 @@ namespace VianaSoft.Partner.Tests.Application
         {
             // Scenario
             var filter = string.Empty;
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
             var result2 = Builder<PartnerResponseViewModel>.CreateNew().Build();
 
             _mapper.Setup(x => x.Map<PartnerResponseViewModel>(result1)).Returns(result2);
@@ -150,8 +150,8 @@ namespace VianaSoft.Partner.Tests.Application
             var filter1 = Builder<DocumentFilterViewModel>.CreateNew().Build();
             var filter2 = Builder<DocumentFilter>.CreateNew().Build();
 
-            var items1 = Builder<Domain.Entities.Partner>.CreateListOfSize(10).Build();
-            var result1 = Builder<ListPage<Domain.Entities.Partner>>.CreateNew().With(x => x.Items, items1).Build();
+            var items1 = Builder<Partner.Domain.Entities.Partner>.CreateListOfSize(10).Build();
+            var result1 = Builder<ListPage<Partner.Domain.Entities.Partner>>.CreateNew().With(x => x.Items, items1).Build();
 
             var items2 = Builder<PartnerResponseViewModel>.CreateListOfSize(10).Build();
             var result2 = Builder<ListPage<PartnerResponseViewModel>>.CreateNew().With(x => x.Items, items2).Build();
@@ -178,11 +178,11 @@ namespace VianaSoft.Partner.Tests.Application
         {
             // Scenario
             var request = Builder<PartnerRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.ExistDocument(It.IsAny<string>()));
             _service.Setup(x => x.GetByNameAsync(It.IsAny<string>()));
-            _service.Setup(x => x.InsertAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.InsertAsync(request);
@@ -192,7 +192,7 @@ namespace VianaSoft.Partner.Tests.Application
 
             _service.Verify(x => x.ExistDocument(It.IsAny<string>()), Times.Once);
             _service.Verify(x => x.GetByNameAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.InsertAsync(It.IsAny<Domain.Entities.Partner>()), Times.Once);
+            _service.Verify(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Once);
         }
 
         [Fact(DisplayName = "Insert - Failure")]
@@ -201,11 +201,11 @@ namespace VianaSoft.Partner.Tests.Application
         {
             // Scenario
             var request = Builder<PartnerRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.ExistDocument(It.IsAny<string>())).ReturnsAsync(result1);
             _service.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(result1);
-            _service.Setup(x => x.InsertAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.InsertAsync(request);
@@ -214,7 +214,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.ExistDocument(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.InsertAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         [Fact(DisplayName = "Update - Success")]
@@ -224,11 +224,11 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(result1);
             _service.Setup(x => x.GetByNameAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -238,7 +238,7 @@ namespace VianaSoft.Partner.Tests.Application
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
             _service.Verify(x => x.GetByNameAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Once);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Once);
         }
 
         [Fact(DisplayName = "Update - Failure")]
@@ -248,11 +248,11 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(result1);
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -262,7 +262,7 @@ namespace VianaSoft.Partner.Tests.Application
 
             _service.Verify(x => x.GetByNameAsync(It.IsAny<string>()), Times.Once);
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         [Fact(DisplayName = "Update - NotFound")]
@@ -272,11 +272,11 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByNameAsync(It.IsAny<string>()));
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -286,7 +286,7 @@ namespace VianaSoft.Partner.Tests.Application
 
             _service.Verify(x => x.GetByNameAsync(It.IsAny<string>()), Times.Once);
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         [Fact(DisplayName = "Update - NotGuid")]
@@ -296,11 +296,11 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = string.Empty;
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByNameAsync(It.IsAny<string>()));
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -310,7 +310,7 @@ namespace VianaSoft.Partner.Tests.Application
 
             _service.Verify(x => x.GetByNameAsync(It.IsAny<string>()), Times.Never);
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         [Fact(DisplayName = "Enable - Success")]
@@ -320,10 +320,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(result1);
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.EnableAsync(filter);
@@ -332,7 +332,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.True(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Once);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Once);
         }
 
         [Fact(DisplayName = "Enable - NotFound")]
@@ -342,10 +342,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.EnableAsync(filter);
@@ -354,7 +354,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         [Fact(DisplayName = "Enable - NotGuid")]
@@ -364,10 +364,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = string.Empty;
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.EnableAsync(filter);
@@ -376,7 +376,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         [Fact(DisplayName = "Disable - Success")]
@@ -386,10 +386,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(result1);
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.DisableAsync(filter);
@@ -398,7 +398,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.True(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Once);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Once);
         }
 
         [Fact(DisplayName = "Disable - NotFound")]
@@ -408,10 +408,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.DisableAsync(filter);
@@ -420,7 +420,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         [Fact(DisplayName = "Disable - NotGuid")]
@@ -430,10 +430,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = string.Empty;
             var request = Builder<PartnerUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Partner>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Partner>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.DisableAsync(filter);
@@ -442,7 +442,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Partner>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Partner>()), Times.Never);
         }
 
         #endregion

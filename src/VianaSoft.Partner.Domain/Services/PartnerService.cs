@@ -60,15 +60,15 @@ namespace VianaSoft.Partner.Domain.Services
             return await _repository.ExistDocument(document);
         }
 
-        public async Task<bool> InsertAsync(Entities.Partner partner)
+        public async Task<bool> InsertAsync(Entities.Partner request)
         {
-            if (!_validator.IsValid(partner))
+            if (!_validator.IsValid(request))
             {
                 _notifier.Add(_message.NotValid("Partner"));
                 return default;
             }
 
-            _repository.InsertAsync(partner);
+            _repository.InsertAsync(request);
 
             return await _repository.Commit();
         }
