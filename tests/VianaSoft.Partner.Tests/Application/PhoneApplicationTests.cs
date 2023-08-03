@@ -149,7 +149,7 @@ namespace VianaSoft.Partner.Tests.Application
         {
             // Scenario
             var filter = "";
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
             var result2 = Builder<PhoneResponseViewModel>.CreateNew().Build();
 
             _mapper.Setup(x => x.Map<PhoneResponseViewModel>(result1));
@@ -193,10 +193,10 @@ namespace VianaSoft.Partner.Tests.Application
         {
             // Scenario
             var request = Builder<PhoneRequestViewModel>.CreateNew().With(x => x.ContactId, Guid.NewGuid().ToString()).Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.ExistsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
-            _service.Setup(x => x.InsertAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.InsertAsync(request);
@@ -205,7 +205,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.True(result);
 
             _service.Verify(x => x.ExistsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.InsertAsync(It.IsAny<Domain.Entities.Phone>()), Times.Once);
+            _service.Verify(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Once);
         }
 
         [Fact(DisplayName = "Insert - Failure")]
@@ -214,10 +214,10 @@ namespace VianaSoft.Partner.Tests.Application
         {
             // Scenario
             var request = Builder<PhoneRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.ExistsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(result1);
-            _service.Setup(x => x.InsertAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.InsertAsync(request);
@@ -225,7 +225,7 @@ namespace VianaSoft.Partner.Tests.Application
             // Affirmations
             Assert.False(result);
 
-            _service.Verify(x => x.InsertAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.InsertAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Update - Success")]
@@ -235,10 +235,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(result1);
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -247,7 +247,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.True(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Once);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Once);
         }
 
         [Fact(DisplayName = "Update - Failure")]
@@ -257,10 +257,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -269,7 +269,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Update - Exists")]
@@ -279,11 +279,11 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.ExistsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(result1);
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -293,7 +293,7 @@ namespace VianaSoft.Partner.Tests.Application
 
             _service.Verify(x => x.ExistsAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Update - NotGuid")]
@@ -303,10 +303,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = string.Empty;
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -315,7 +315,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Update - NotFound")]
@@ -325,10 +325,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.UpdateAsync(filter, request);
@@ -337,7 +337,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Enable - Success")]
@@ -347,10 +347,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(result1);
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.EnableAsync(filter);
@@ -359,7 +359,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.True(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Once);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Once);
         }
 
         [Fact(DisplayName = "Enable - NotFound")]
@@ -369,10 +369,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.EnableAsync(filter);
@@ -381,7 +381,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Enable - NotGuid")]
@@ -391,10 +391,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = string.Empty;
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.EnableAsync(filter);
@@ -403,7 +403,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Disable - Success")]
@@ -413,10 +413,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>())).ReturnsAsync(result1);
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.DisableAsync(filter);
@@ -425,7 +425,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.True(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Once);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Once);
         }
 
         [Fact(DisplayName = "Disable - NotFound")]
@@ -435,10 +435,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = Guid.NewGuid().ToString();
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.DisableAsync(filter);
@@ -447,7 +447,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Once);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         [Fact(DisplayName = "Disable - NotGuid")]
@@ -457,10 +457,10 @@ namespace VianaSoft.Partner.Tests.Application
             // Scenario
             var filter = string.Empty;
             var request = Builder<PhoneUpdateRequestViewModel>.CreateNew().Build();
-            var result1 = Builder<Domain.Entities.Phone>.CreateNew().Build();
+            var result1 = Builder<Partner.Domain.Entities.Phone>.CreateNew().Build();
 
             _service.Setup(x => x.GetByIdAsync(It.IsAny<string>()));
-            _service.Setup(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>())).ReturnsAsync(true);
+            _service.Setup(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>())).ReturnsAsync(true);
 
             // Action
             var result = await _application.DisableAsync(filter);
@@ -469,7 +469,7 @@ namespace VianaSoft.Partner.Tests.Application
             Assert.False(result);
 
             _service.Verify(x => x.GetByIdAsync(It.IsAny<string>()), Times.Never);
-            _service.Verify(x => x.UpdateAsync(It.IsAny<Domain.Entities.Phone>()), Times.Never);
+            _service.Verify(x => x.UpdateAsync(It.IsAny<Partner.Domain.Entities.Phone>()), Times.Never);
         }
 
         #endregion
